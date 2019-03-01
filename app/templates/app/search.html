@@ -1,0 +1,60 @@
+{% extends 'app/base.html' %}
+
+{% block search %}
+<!--<form action='/search/' method='POST'>
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type=' submit' value='検索' />
+</form>-->
+{% endblock search %}
+
+{% block content %}
+{% for post in posts %}
+<div class="panel panel-default">
+    <div class="panel panel-heading">
+        <div class="panel-title">
+            <h3><a href="/">{{ post.title }}</a></h3>
+            <p>Published_date: {{ post.date }}</p>
+        </div>
+    </div>
+    <div class="panel-body">
+        <p>{{ post.abstract|linebreaks }}</p>
+    </div>
+
+</div>
+{% endfor %}
+<nav aria-label="pagination_2">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">
+                前へ
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">
+                {{ posts.previous_page_number }}
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="page-item"><a class="page-link" href="?page={{ posts.current_page_number }}">{{ posts.number }}</a>
+        </li>
+        {% if posts.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ posts.next_page_number }}">
+                {{ posts.next_page_number }}
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ posts.next_page_number }}">
+                次へ
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endblock content %}

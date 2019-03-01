@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<html>
+
+<head>
+    <title>J-Recom</title>
+    <link rel="icon" type="image/gif" href="{% static 'images/icon.gif' %}">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    <link rel="stylesheet" href="{% static 'css/list.css' %}">
+</head>
+
+
+<body>
+    <div class="page-header">
+        <h1><a href="/">Journal Recommender</a></h1>
+    </div>
+</body>
+
+<body>
+    <div id="side">
+        <ul class="sidenav">
+            <li><a class="active" href="/">Home</a></li>
+            <li><a href="#news">News</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </div>
+
+
+
+    <!--<div id="right_side" class="edit">
+        {% block postblock %}
+        {% endblock %}
+    </div>-->
+
+
+    <div class="content_container">
+        {% block search %}
+        {% endblock %}
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default"><a href="/">新しい順</a></button>
+            <button type="button" class="btn btn-default"><a href="/old/">古い順</a></button>
+        </div>
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-md-8">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
