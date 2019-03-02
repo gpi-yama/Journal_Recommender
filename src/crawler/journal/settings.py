@@ -69,8 +69,8 @@ ITEM_PIPELINES = {
 }
 
 MYSQL_DATABASE = "journal"
-MYSQL_USER = "yamaguchir"
-MYSQL_PASSWORD = "myakudo!"
+MYSQL_USER = "root"
+MYSQL_PASSWORD = "root"
 
 
 # Enable and configure the AutoThrottle extension (disabled by default)
