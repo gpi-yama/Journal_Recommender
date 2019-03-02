@@ -16,7 +16,7 @@ class JournalPipeline(object):
         settings = spider.settings
         params = {
             #            'host': settings.get('MYSQL_HOST', 'local_host'),
-            'db': settings.get('MYSQL_DATABASE', "journal2"),
+            'db': settings.get('MYSQL_DATABASE', "journal"),
             'user': settings.get('MYSQL_USER', "yamaguchir"),
             'passwd': settings.get('MYSQL_PASSWORD', ' '),
             'charset': settings.get('MYSQL_CHARSET', 'utf8mb4')
