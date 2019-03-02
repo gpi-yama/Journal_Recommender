@@ -10,6 +10,8 @@ class Post(models.Model):
     author = models.TextField()
     abstract = models.TextField()
     date = models.Field()
+    url = models.TextField()
+    jname = models.TextField()
 
     class Meta:
         managed = False

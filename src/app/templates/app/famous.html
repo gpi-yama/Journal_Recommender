@@ -20,7 +20,7 @@
     <div class="panel panel-heading">
 
         <div class="panel-title">
-            <h3><a href="/">{{ post.title }}</a></h3>
+            <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
             <p>{{ post.author }}</p>
         </div>
     </div>
@@ -29,6 +29,7 @@
         <h5>
             <p>Published_date: {{ post.date }}</p>
         </h5>
+        <p>{{ post.jname }}</p>
     </div>
 
 </div>
