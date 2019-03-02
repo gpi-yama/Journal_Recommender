@@ -3,38 +3,21 @@
 {% block menu %}
 <div id="side">
     <ul class="sidenav">
-        <li><a class="active" href="/">List</a></li>
-        <li><a href="/favorite">Favorite</a></li>
+        <li><a href="/">List</a></li>
+        <li><a class="active" href="/favorite">Favorite</a></li>
         <li><a href="/read">Read</a></li>
         <li><a href="/want">Want</a></li>
         <li><a href="/famous">Famous</a></li>
     </ul>
 </div>
-{% endblock menu%}
-
-
-{% block search %}
-<form method="POST" class="post-form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="save btn btn-default">
-        検索
-    </button>
-</form>
-{% endblock search %}
+{% endblock menu %}
 
 {% block content %}
-<div class="btn-group" role="group">
-    <button type="button" class="btn btn-default"><a href="/">新しい順</a></button>
-    <button type="button" class="btn btn-default"><a href="/old/">古い順</a></button>
-</div>
-<br>
-<br>
+<h1>Favorite Lists</h1>
 
 {% for post in posts %}
 <div class="panel panel-default">
     <div class="panel panel-heading">
-
         <form method="POST" class="post-fav">
             {% csrf_token %}
             {{ form_fav.select.label }}

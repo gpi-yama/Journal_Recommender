@@ -16,16 +16,10 @@
         <h1><a href="/">Journal Recommender</a></h1>
     </div>
 </body>
+{% block menu %}
+{% endblock %}
 
 <body>
-    <div id="side">
-        <ul class="sidenav">
-            <li><a class="active" href="/">Home</a></li>
-            <li><a href="#news">News</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-    </div>
 
 
 
@@ -38,12 +32,6 @@
     <div class="content_container">
         {% block search %}
         {% endblock %}
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default"><a href="/">新しい順</a></button>
-            <button type="button" class="btn btn-default"><a href="/old/">古い順</a></button>
-        </div>
-        <br>
-        <br>
         <div class="row">
             <div class="col-md-8">
                 {% block content %}
