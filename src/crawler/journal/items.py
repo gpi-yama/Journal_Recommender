@@ -15,3 +15,5 @@ class JournalItem(scrapy.Item):
     author = scrapy.Field()
     date = scrapy.Field()
     abstract = scrapy.Field()
+    url = scrapy.Field()
+    jname = scrapy.Field()

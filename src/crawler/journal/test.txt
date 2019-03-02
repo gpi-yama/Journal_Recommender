@@ -1,0 +1,6 @@
+<li class="source">
+                                        Journal: <a class="productParent" data-prod-id="1F51BCFAA50101CAF5CB9A20F8DEA3E4" href="/core/journals/journal-of-fluid-mechanics">Journal of Fluid Mechanics</a> / <a href="/core/product/8A4D5FA5CEA0909DD82A0575FA179359" class="productParent" data-prod-id="8A4D5FA5CEA0909DD82A0575FA179359">Volume 865</a>
+                                          /
+                                             25 April 2019
+                          
+                                      </li>

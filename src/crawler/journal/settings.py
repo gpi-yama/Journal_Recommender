@@ -68,7 +68,7 @@ ITEM_PIPELINES = {
     'journal.pipelines.JournalPipeline': 800,
 }
 
-MYSQL_DATABASE = "journal"
+MYSQL_DATABASE = "journal2"
 MYSQL_USER = "yamaguchir"
 MYSQL_PASSWORD = "myakudo!"
 

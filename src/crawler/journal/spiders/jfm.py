@@ -19,6 +19,11 @@ class JfmSpider(scrapy.Spider):
             item["date"] = select.css("li.published span.date::text").extract()
             item["abstract"] = select.css(
                 "li.no-margin-top.abstract p::text").extract()
+            item["url"] = select.css(
+                "li.source a.url.doi::text"
+            ).extract()
+            item["jname"] = select.css(
+                "li.source a.productParent::text").extract()
 
             yield item
 
