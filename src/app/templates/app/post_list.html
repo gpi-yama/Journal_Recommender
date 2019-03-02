@@ -1,0 +1,95 @@
+{% extends 'app/base.html' %}
+
+{% block menu %}
+<div id="side">
+    <ul class="sidenav">
+        <li><a class="active" href="/">List</a></li>
+        <li><a href="/favorite">Favorite</a></li>
+        <li><a href="/read">Read</a></li>
+        <li><a href="/want">Want</a></li>
+        <li><a href="/famous">Famous</a></li>
+    </ul>
+</div>
+{% endblock menu%}
+
+
+{% block search %}
+<form method="POST" class="post-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">
+        検索
+    </button>
+</form>
+{% endblock search %}
+
+{% block content %}
+<div class="btn-group" role="group">
+    <button type="button" class="btn btn-default"><a href="/">新しい順</a></button>
+    <button type="button" class="btn btn-default"><a href="/old/">古い順</a></button>
+</div>
+<br>
+<br>
+
+{% for post in posts %}
+<div class="panel panel-default">
+    <div class="panel panel-heading">
+
+        <form method="POST" class="post-fav">
+            {% csrf_token %}
+            {{ form_fav.select.label }}
+            {% for radio in form_fav.select %}
+            {{ radio.tag }}
+            <label for="id_select_{{ radio.index }}">{{ radio.choice_label }}</label>
+            {% endfor %}
+            <input type="hidden" name="fav_id" value="{{ post.id }}">
+            <input type="submit" value="更新">
+        </form>
+
+        <div class="panel-title">
+            <h3><a href="/">{{ post.title }}</a></h3>
+            <p>{{ post.author }}</p>
+        </div>
+    </div>
+    <div class="panel-body">
+        <p>{{ post.abstract|linebreaks }}</p>
+        <h5>
+            <p>Published_date: {{ post.date }}</p>
+        </h5>
+    </div>
+
+</div>
+{% endfor %}
+<nav aria-label="pagination_2">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">
+                前へ
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">
+                {{ posts.previous_page_number }}
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="page-item"><a class="page-link" href="?page={{ posts.current_page_number }}">{{ posts.number }}</a>
+        </li>
+        {% if posts.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ posts.next_page_number }}">
+                {{ posts.next_page_number }}
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ posts.next_page_number }}">
+                次へ
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+
+</nav>
+
+{% endblock content %}

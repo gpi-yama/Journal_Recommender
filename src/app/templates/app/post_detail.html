@@ -1,0 +1,32 @@
+{% extends 'app/base.html' %}
+
+{% block postblock %}
+<h1>{{ post.title }}</h1>
+<a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}">
+    <span class="glyphicon glyphicon-pencil"></span>
+</a>
+<div class="date">
+    {{ post.created_date }}
+    <hr>
+</div>
+<div class="detailed_text">
+    {{ post.text }}
+</div>
+<hr>
+{% if post.finished_date %}
+<div class="finished_date">
+    {{ post.finished_date }}
+</div>
+{% else %}
+{% if post.deadline_date > now %}
+<div class="OK">
+    {{ post.deadline_date }}
+</div>
+{% else %}
+<div class="NG">
+    {{ post.deadline_date }}
+</div>
+{% endif %}
+{% endif %}
+
+{% endblock %}

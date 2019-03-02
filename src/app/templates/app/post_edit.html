@@ -1,0 +1,39 @@
+{% extends 'app/base.html'%}
+
+{% block postblock %}
+<h1>New Post</h1>
+<form method="POST" class="post-form">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Save</button>
+</form>
+{% endblock %}
+
+
+{% block content %}
+<a>
+    <h1>{{ post.title }}</h1>
+    <div class="date">
+        {{ post.created_date }}
+        <hr>
+    </div>
+    <div class="detailed_text">
+        {{ post.text }}
+    </div>
+    <hr>
+    {% if post.finished_date %}
+    <div class="finished_date">
+        {{ post.finished_date }}
+    </div>
+    {% else %}
+    {% if post.deadline_date > now %}
+    <div class="OK">
+        {{ post.deadline_date }}
+    </div>
+    {% else %}
+    <div class="NG">
+        {{ post.deadline_date }}
+    </div>
+    {% endif %}
+    {% endif %}
+</a>
+{% endblock %}
