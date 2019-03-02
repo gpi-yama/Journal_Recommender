@@ -1,7 +1,7 @@
 ul.post {
     display:table;
-    table-layout:fixed;
-    width:500px;
+    table-layout: auto;
+    width:10%;
     padding-bottom: 40px;
 }
 ul.post li {

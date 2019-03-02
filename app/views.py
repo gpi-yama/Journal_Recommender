@@ -7,6 +7,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q, Count
 from django.template import RequestContext
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render_to_response
 # Create your views here.
