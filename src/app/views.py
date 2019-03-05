@@ -15,17 +15,19 @@ from django.shortcuts import render_to_response
 
 def listing(request, order):
     form_fav = FavForm()
-    if request.method == "POST":
-        form_fav = FavForm(request.POST)
-        print(form_fav.data["select"])
-        PostFav.objects.update_or_create(
-            user=request.user,
-            fav_id=form_fav.data["fav_id"],
-            defaults={
-                "fav_date": timezone.now(),
-                "score": form_fav.data["select"],
-            }
-        )
+    try:
+        if request.method == "POST":
+            form_fav = FavForm(request.POST)
+            PostFav.objects.update_or_create(
+                user=request.user,
+                fav_id=form_fav.data["fav_id"],
+                defaults={
+                    "fav_date": timezone.now(),
+                    "score": form_fav.data["select"],
+                }
+            )
+    except:
+        print("search")
 
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -72,7 +74,6 @@ def post_list_old(request):
 def fav(request):
     if request.method == "POST":
         form_fav = FavForm(request.POST)
-        print(form_fav.cleaned_data["select"])
 
 
 def favorite(request):

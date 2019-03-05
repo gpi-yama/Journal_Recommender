@@ -25,7 +25,7 @@ SECRET_KEY = ')5a*wpjs^*pve9t^*k(9by)bli@s6ql!z5be&$18)lzl^w=+hr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.168.1.154"]
 
 
 # Application definition
