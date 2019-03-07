@@ -9,5 +9,6 @@ urlpatterns = [
     path(r'want/', views.want, name='want'),
     path(r'read/', views.read, name='read'),
     path(r'famous/', views.famous, name='famous'),
+    path(r'cash_clear/', views.cash_clear, name='cash_clear'),
     
 ]

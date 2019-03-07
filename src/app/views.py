@@ -8,8 +8,9 @@ from django.db.models import Q, Count
 from django.template import RequestContext
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
-
+from django.core.cache import cache
 from django.shortcuts import render_to_response
+from django import db
 # Create your views here.
 
 
@@ -55,6 +56,7 @@ def listing(request, order):
         cposts = paginator.page(paginator.num_pages)
 
     return form, cposts, form_fav
+    del cposts, form_fav, form, cposts, page, paginator, posts
 
 
 def post_list(request):
@@ -62,6 +64,7 @@ def post_list(request):
     return render(request, 'app/post_list.html',
                   {'form': form, 'posts': cposts,
                    'form_fav': form_fav})
+    del form, cposts, form_fav
 
 
 def post_list_old(request):
@@ -69,12 +72,8 @@ def post_list_old(request):
     return render(request, 'app/post_list.html',
                   {'form': form, 'posts': cposts,
                    'form_fav': form_fav})
-
-
-def fav(request):
-    if request.method == "POST":
-        form_fav = FavForm(request.POST)
-
+    del form, cposts, form_fav
+    
 
 def favorite(request):
     form_fav = FavForm()
@@ -101,6 +100,7 @@ def favorite(request):
     return render(request, "app/favorite.html",
                   {"posts": posts, "form_fav": form_fav})
 
+    del request, posts, form_fav, post_user
 
 def want(request):
     form_fav = FavForm()
@@ -126,7 +126,7 @@ def want(request):
 
     return render(request, "app/want.html",
                   {"posts": posts, "form_fav": form_fav})
-
+    del request, posts, form_fav, post_user
 
 def read(request):
     form_fav = FavForm()
@@ -152,7 +152,7 @@ def read(request):
 
     return render(request, "app/read.html",
                   {"posts": posts, "form_fav": form_fav})
-
+    del request, posts, form_fav, post_user
 
 def famous(request):
     post_user = PostFav.objects.filter(
@@ -167,7 +167,12 @@ def famous(request):
     )
 
     return render(request, "app/famous.html", {"posts": posts})
+    del posts, post_user, request
 
+def cash_clear(request):
+    db.reset_queries()
+    cache.clear()
+    return render(request, "app/cash_clear.html")
 
 """
 def post_list_created_date(request):
