@@ -30,7 +30,7 @@ class JfmSpider(scrapy.Spider):
         name = 'a[href="?pageNum=' + str(self._num) + '"]'
         next_page = response.css(name).xpath("@href").extract_first()
         print("next page is", next_page)
-        if next_page is not None:
+        if next_page is not None and self._num < 20:
             self._num += 1
             print("OKOK")
             next_page = response.urljoin(next_page)

@@ -51,6 +51,12 @@ class JournalPipeline(object):
         except:
             num = 0
 
+        try:
+            a = items["date"][1]
+            pp = 1
+        except:
+            pp = 0
+
         if items["title"] != []:
             strs = re.sub('\n', '', ' '.join(items["title"]))
             title = self.c.execute('''
@@ -79,7 +85,7 @@ class JournalPipeline(object):
                         VALUES (%s, %s, %s, %s, %s, %s)
                         ''', (re.sub('\n', '', ' '.join(items["title"])),
                               re.sub('\n', '', ' , '.join(items["author"])),
-                              re.sub('\n', '', items["date"][num]),
+                              re.sub('\n', '', items["date"][pp]),
                               re.sub('\n', '', ' '.join(items["abstract"])),
                               re.sub('\n', '', ' '.join(items["url"])),
                               re.sub('\n', '', ' , '.join(items["jname"]))))

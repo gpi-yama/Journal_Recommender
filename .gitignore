@@ -3,3 +3,5 @@
 *.o
 __pycache__
 */__pycache__
+log
+*/*/__pycache__
