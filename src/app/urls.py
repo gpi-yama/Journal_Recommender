@@ -10,5 +10,6 @@ urlpatterns = [
     path(r'read/', views.read, name='read'),
     path(r'famous/', views.famous, name='famous'),
     path(r'cash_clear/', views.cash_clear, name='cash_clear'),
-    
+    path(r'/query?', views.post_list, name="query"),
+    path(r'/url_replace', views.url_replace, name="url_replace"),
 ]

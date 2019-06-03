@@ -16,33 +16,37 @@ from django import db
 
 def listing(request, order):
     form_fav = FavForm()
-    try:
-        if request.method == "POST":
-            form_fav = FavForm(request.POST)
-            PostFav.objects.update_or_create(
-                user=request.user,
-                fav_id=form_fav.data["fav_id"],
-                defaults={
-                    "fav_date": timezone.now(),
-                    "score": form_fav.data["select"],
-                }
-            )
-    except:
-        print("search")
+    if request.method == "POST":
+        print("WHAHA", request.POST["post_fav"])
+        form_fav = FavForm(request.POST)
+        PostFav.objects.update_or_create(
+            user=request.user,
+            fav_id=form_fav.data["fav_id"],
+            defaults={
+                "fav_date": timezone.now(),
+                "score": form_fav.data["select"],
+            }
+        )
+    query = False
+    if request.GET.get("title") is not None:
+        title = request.GET.get("title")
+        query = True
+    if request.GET.get('author') is not None:
+        author = request.GET.get('author')
+        query = True
+    if request.GET.get('abstract') is not None:
+        abstract = request.GET.get('abstract')
+        query = True
 
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        posts = Post.objects.all()
-
-        if form.is_valid():
-            posts = Post.objects.filter(
-                Q(title__contains=form.cleaned_data["title"]) &
-                Q(author__contains=form.cleaned_data["author"]) &
-                Q(abstract__contains=form.cleaned_data["abstract"])
-            ).order_by(order)
+    form = SearchForm()
+    if query is True:
+        posts = Post.objects.filter(
+            Q(title__contains=title) &
+            Q(author__contains=author) &
+            Q(abstract__contains=abstract)
+        ).order_by(order)
 
     else:
-        form = SearchForm()
         posts = Post.objects.all().order_by(order)
 
     paginator = Paginator(posts, 10)
@@ -56,15 +60,13 @@ def listing(request, order):
         cposts = paginator.page(paginator.num_pages)
 
     return form, cposts, form_fav
-    del cposts, form_fav, form, cposts, page, paginator, posts
 
 
 def post_list(request):
     form, cposts, form_fav = listing(request, "id")
     return render(request, 'app/post_list.html',
                   {'form': form, 'posts': cposts,
-                   'form_fav': form_fav})
-    del form, cposts, form_fav
+                   'form_fav': form_fav, 'query_string': request.GET.urlencode()})
 
 
 def post_list_old(request):
@@ -73,7 +75,13 @@ def post_list_old(request):
                   {'form': form, 'posts': cposts,
                    'form_fav': form_fav})
     del form, cposts, form_fav
-    
+
+
+def url_replace(request, field, value):
+    url_dict = request.GET.copy()
+    url_dict[field] = str(value)
+    return url_dict.urlencode()
+
 
 def favorite(request):
     form_fav = FavForm()
@@ -102,6 +110,7 @@ def favorite(request):
 
     del request, posts, form_fav, post_user
 
+
 def want(request):
     form_fav = FavForm()
     if request.method == "POST":
@@ -127,6 +136,7 @@ def want(request):
     return render(request, "app/want.html",
                   {"posts": posts, "form_fav": form_fav})
     del request, posts, form_fav, post_user
+
 
 def read(request):
     form_fav = FavForm()
@@ -154,6 +164,7 @@ def read(request):
                   {"posts": posts, "form_fav": form_fav})
     del request, posts, form_fav, post_user
 
+
 def famous(request):
     post_user = PostFav.objects.filter(
         user=request.user
@@ -169,10 +180,12 @@ def famous(request):
     return render(request, "app/famous.html", {"posts": posts})
     del posts, post_user, request
 
+
 def cash_clear(request):
     db.reset_queries()
     cache.clear()
     return render(request, "app/cash_clear.html")
+
 
 """
 def post_list_created_date(request):

@@ -25,7 +25,7 @@ SECRET_KEY = ')5a*wpjs^*pve9t^*k(9by)bli@s6ql!z5be&$18)lzl^w=+hr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.93"]
+ALLOWED_HOSTS = ["192.168.1.93", "localhost"]
 
 
 # Application definition
@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'journal',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': 'myakudo!',
         'HOST': '',
         'PORT': '',
     }
