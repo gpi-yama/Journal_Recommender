@@ -28,3 +28,32 @@ class PostFav(models.Model):
 
     class Meta:
         db_table = "favorite"
+
+
+class RecomSim(models.Model):
+    id = models.IntegerField(primary_key=True)
+    rank1 = models.IntegerField()
+    rank2 = models.IntegerField()
+    rank3 = models.IntegerField()
+    rank4 = models.IntegerField()
+    rank5 = models.IntegerField()
+    rank6 = models.IntegerField()
+    rank7 = models.IntegerField()
+    rank8 = models.IntegerField()
+    rank9 = models.IntegerField()
+    rank10 = models.FloatField()
+    score1 = models.FloatField()
+    score2 = models.FloatField()
+    score3 = models.FloatField()
+    score4 = models.FloatField()
+    score5 = models.FloatField()
+    score6 = models.FloatField()
+    score7 = models.FloatField()
+    score8 = models.FloatField()
+    score9 = models.FloatField()
+    score10 = models.FloatField()
+
+    class Meta:
+        managed=False
+        db_table = "similality"
+

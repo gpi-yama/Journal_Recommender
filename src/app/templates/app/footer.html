@@ -1,0 +1,32 @@
+<nav aria-label="pagination_2">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li class="page-item"><a class="page-link" href="?{{ query_string }}&page={{ posts.previous_page_number }}">
+                前へ
+            </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="?{{ query_string }}&page={{ posts.previous_page_number }}">
+                {{ posts.previous_page_number }}
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="page-item"><a class="page-link"
+                href="?{{ query_string }}&page={{ posts.current_page_number }}">{{ posts.number }}</a>
+        </li>
+        {% if posts.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?{{ query_string }}&page={{ posts.next_page_number }}">
+                {{ posts.next_page_number }}
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?{{ query_string }}&page={{ posts.next_page_number }}">
+                次へ
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+
+</nav>

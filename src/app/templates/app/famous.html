@@ -8,62 +8,7 @@
         <li><a href="/read">Read</a></li>
         <li><a href="/want">Want</a></li>
         <li><a class="active" href="/famous">Famous</a></li>
+        <li><a href="/recommend">Recommend</a></li>
     </ul>
 </div>
 {% endblock menu %}
-
-{% block content %}
-<h1>Famous Lists</h1>
-
-{% for post in posts %}
-<div class="panel panel-default">
-    <div class="panel panel-heading">
-
-        <div class="panel-title">
-            <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-            <p>{{ post.author }}</p>
-        </div>
-    </div>
-    <div class="panel-body">
-        <p>{{ post.abstract|linebreaks }}</p>
-        <h5>
-            <p>Published_date: {{ post.date }}</p>
-        </h5>
-        <p>{{ post.jname }}</p>
-    </div>
-
-</div>
-{% endfor %}
-<nav aria-label="pagination_2">
-    <ul class="pagination">
-        {% if posts.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">
-                前へ
-            </a>
-        </li>
-        <li class="page-item"><a class="page-link" href="?page={{ posts.previous_page_number }}">
-                {{ posts.previous_page_number }}
-            </a>
-        </li>
-        {% endif %}
-
-        <li class="page-item"><a class="page-link" href="?page={{ posts.current_page_number }}">{{ posts.number }}</a>
-        </li>
-        {% if posts.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ posts.next_page_number }}">
-                {{ posts.next_page_number }}
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?page={{ posts.next_page_number }}">
-                次へ
-            </a>
-        </li>
-        {% endif %}
-
-    </ul>
-
-</nav>
-
-{% endblock content %}

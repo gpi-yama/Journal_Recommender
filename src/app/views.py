@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.views.generic import ListView
-from .models import Post, PostFav
+from .models import Post, PostFav, RecomSim
 from .forms import PostForm, SearchForm, FavForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q, Count
@@ -17,7 +17,6 @@ from django import db
 def listing(request, order):
     form_fav = FavForm()
     if request.method == "POST":
-        print("WHAHA", request.POST["post_fav"])
         form_fav = FavForm(request.POST)
         PostFav.objects.update_or_create(
             user=request.user,
@@ -77,12 +76,6 @@ def post_list_old(request):
     del form, cposts, form_fav
 
 
-def url_replace(request, field, value):
-    url_dict = request.GET.copy()
-    url_dict[field] = str(value)
-    return url_dict.urlencode()
-
-
 def favorite(request):
     form_fav = FavForm()
     if request.method == "POST":
@@ -105,10 +98,18 @@ def favorite(request):
             "fav_id").annotate(dcount=Count("fav_id")).values("fav_id")
     ).order_by("id")
 
+    paginator = Paginator(posts, 10)
+    page = request.GET.get("page")
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
     return render(request, "app/favorite.html",
                   {"posts": posts, "form_fav": form_fav})
-
-    del request, posts, form_fav, post_user
 
 
 def want(request):
@@ -133,9 +134,18 @@ def want(request):
             "fav_id").annotate(dcount=Count("fav_id")).values("fav_id")
     ).order_by("id")
 
+    paginator = Paginator(posts, 10)
+    page = request.GET.get("page")
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
     return render(request, "app/want.html",
                   {"posts": posts, "form_fav": form_fav})
-    del request, posts, form_fav, post_user
 
 
 def read(request):
@@ -166,6 +176,20 @@ def read(request):
 
 
 def famous(request):
+    form_fav = FavForm()
+    if request.method == "POST":
+        form_fav.initial = 0
+        form_fav = FavForm(request.POST)
+        print(form_fav.data["select"])
+        PostFav.objects.update_or_create(
+            user=request.user,
+            fav_id=form_fav.data["fav_id"],
+            defaults={
+                "fav_date": timezone.now(),
+                "score": form_fav.data["select"],
+            }
+        )
+
     post_user = PostFav.objects.filter(
         user=request.user
     )
@@ -177,55 +201,67 @@ def famous(request):
                         "fav_id")
     )
 
-    return render(request, "app/famous.html", {"posts": posts})
-    del posts, post_user, request
+    paginator = Paginator(posts, 10)
+    page = request.GET.get("page")
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    return render(request, "app/famous.html", {"posts": posts, "form_fav": form_fav})
+
+
+def recommend(request):
+    form_fav = FavForm()
+    if request.method == "POST":
+        form_fav.initial = 0
+        form_fav = FavForm(request.POST)
+        print(form_fav.data["select"])
+        PostFav.objects.update_or_create(
+            user=request.user,
+            fav_id=form_fav.data["fav_id"],
+            defaults={
+                "fav_date": timezone.now(),
+                "score": form_fav.data["select"],
+            }
+        )
+
+    post_user = PostFav.objects.filter(
+        user=request.user
+    )
+
+
+    posts = []
+    for mm in range(3, 0, -1):
+        for i in range(1,6):
+            orders = RecomSim.objects.filter(
+            id__in=PostFav.objects.filter(user=request.user, score=mm).values("fav_id")
+            ).order_by("score"+str(i))
+
+
+            for j in range(len(orders)):
+                num = dict(orders.values("rank1")[j])["rank1"]
+                posts += Post.objects.filter(
+                    id=int(num)
+                )
+
+    paginator = Paginator(posts, 10)
+    page = request.GET.get("page")
+
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+
+    return render(request, "app/recommend.html", {"posts": posts, "form_fav": form_fav})
 
 
 def cash_clear(request):
     db.reset_queries()
     cache.clear()
     return render(request, "app/cash_clear.html")
-
-
-"""
-def post_list_created_date(request):
-    posts = Post.objects.filter(
-        author=request.user
-    ).order_by("created_date")
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.created_date = timezone.now()
-            post.save()
-    else:
-        form = PostForm()
-    return render(request, 'app/post_list.html', {'posts': posts, 'form': form})
-
-
-def post_detail(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    now = timezone.now()
-    return render(request, 'app/post_detail.html', {'post': post, 'now': now})
-
-
-def post_edit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
-            return redirect(post_detail, pk=post.pk)
-    else:
-        form = PostForm()
-    return render(request, 'app/post_edit.html', {'form': form, 'post': post})
-
-
-class BoardListView(ListView):
-    model = Post
-    context_object_name = 'boards'
-    template_name = 'app/home.html'
-"""
