@@ -238,7 +238,7 @@ def recommend(request):
     )
 
 
-    posts = []
+    posts = None
     for mm in range(3, 0, -1):
         for i in range(1,6):
             orders = RecomSim.objects.filter(
@@ -248,10 +248,16 @@ def recommend(request):
 
             for j in range(len(orders)):
                 num = dict(orders.values("rank1")[j])["rank1"]
-                posts += Post.objects.filter(
+                if posts is None:
+                    posts = Post.objects.filter(
+                        id=int(num)
+                    )
+                posts |= Post.objects.filter(
                     id=int(num)
                 )
-
+    
+    posts = posts.distinct()
+    
     paginator = Paginator(posts, 10)
     page = request.GET.get("page")
 
