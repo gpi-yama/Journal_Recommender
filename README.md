@@ -35,3 +35,9 @@ or import journal.sql to db
 
 ### Run server
 ```python manage.py runserver 0.0.0.0:2715```
+
+
+### Release  
+2019.6.5  
+AND search imlpement  
+Recommender implement  
