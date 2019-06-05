@@ -27,23 +27,32 @@ def listing(request, order):
             }
         )
     query = False
+    title = None
+    author = None
+    abstract = None
     if request.GET.get("title") is not None:
-        title = request.GET.get("title")
+        title = request.GET.get("title").split()
         query = True
     if request.GET.get('author') is not None:
-        author = request.GET.get('author')
+        author = request.GET.get('author').split()
         query = True
     if request.GET.get('abstract') is not None:
-        abstract = request.GET.get('abstract')
+        abstract = request.GET.get('abstract').split()
         query = True
 
     form = SearchForm()
+    Qs = Q()
     if query is True:
-        posts = Post.objects.filter(
-            Q(title__contains=title) &
-            Q(author__contains=author) &
-            Q(abstract__contains=abstract)
-        ).order_by(order)
+        if title is not None:
+            for t in title:
+                Qs &= Q(title__icontains=t)
+        if author is not None:
+            for t in author:
+                Qs &= Q(author__icontains=t)
+        if abstract is not None:
+            for t in abstract:
+                Qs &= Q(abstract__icontains=t)
+        posts = Post.objects.filter(Qs).order_by(order)
 
     else:
         posts = Post.objects.all().order_by(order)
@@ -72,7 +81,7 @@ def post_list_old(request):
     form, cposts, form_fav = listing(request, "-id")
     return render(request, 'app/post_list.html',
                   {'form': form, 'posts': cposts,
-                   'form_fav': form_fav})
+                   'form_fav': form_fav, 'query_string': request.GET.urlencode()})
     del form, cposts, form_fav
 
 
@@ -81,7 +90,6 @@ def favorite(request):
     if request.method == "POST":
         form_fav = FavForm(request.POST)
         form_fav.initial = 3
-        print(form_fav.data["select"])
         PostFav.objects.update_or_create(
             user=request.user,
             fav_id=form_fav.data["fav_id"],
@@ -117,7 +125,6 @@ def want(request):
     if request.method == "POST":
         form_fav.initial = 1
         form_fav = FavForm(request.POST)
-        print(form_fav.data["select"])
         PostFav.objects.update_or_create(
             user=request.user,
             fav_id=form_fav.data["fav_id"],
@@ -153,7 +160,6 @@ def read(request):
     if request.method == "POST":
         form_fav.initial = 2
         form_fav = FavForm(request.POST)
-        print(form_fav.data["select"])
         PostFav.objects.update_or_create(
             user=request.user,
             fav_id=form_fav.data["fav_id"],
@@ -180,7 +186,6 @@ def famous(request):
     if request.method == "POST":
         form_fav.initial = 0
         form_fav = FavForm(request.POST)
-        print(form_fav.data["select"])
         PostFav.objects.update_or_create(
             user=request.user,
             fav_id=form_fav.data["fav_id"],
@@ -219,7 +224,6 @@ def recommend(request):
     if request.method == "POST":
         form_fav.initial = 0
         form_fav = FavForm(request.POST)
-        print(form_fav.data["select"])
         PostFav.objects.update_or_create(
             user=request.user,
             fav_id=form_fav.data["fav_id"],
